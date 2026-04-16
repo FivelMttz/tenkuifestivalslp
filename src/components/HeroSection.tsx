@@ -8,6 +8,7 @@ const defaultHeroImages = [hero1, hero2, hero3];
 
 const HeroSection = () => {
   const { heroImages } = useEvents();
+  const displayImages = heroImages.length > 0 ? heroImages : defaultHeroImages;
 
   return (
     <section id="inicio" className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
