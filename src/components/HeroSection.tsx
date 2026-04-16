@@ -61,11 +61,9 @@ const HeroSection = () => {
         </div>
 
         {/* Hero Carousel */}
-        {heroImages.length > 0 && (
-          <div className="max-w-4xl">
-            <HeroCarousel images={heroImages} />
-          </div>
-        )}
+        <div className="max-w-4xl">
+          <HeroCarousel images={displayImages} />
+        </div>
       </div>
     </section>
   );
