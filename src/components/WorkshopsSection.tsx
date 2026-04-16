@@ -1,51 +1,5 @@
-import { BookOpen, Heart, Paintbrush, Drum } from "lucide-react";
-
-const talleres = [
-  {
-    title: "Cuentacuentos",
-    subtitle: "Historias vivas para toda la familia.",
-    date: "1 MAYO · 12:00 P.M.",
-    venue: "Semillas Suzuki",
-    audience: "6 a 12 años",
-    cost: "Cooperación",
-    icon: BookOpen,
-    iconBg: "bg-golden/20",
-    iconColor: "text-golden",
-  },
-  {
-    title: "Entre libros y arrullos",
-    subtitle: "Espacio sensorial para primera infancia.",
-    date: "2 MAYO · 1:00 P.M.",
-    venue: "Letrasconmás",
-    audience: "2 a 5 años",
-    cost: "Cooperación (infancia + acompañante)",
-    icon: Heart,
-    iconBg: "bg-accent/20",
-    iconColor: "text-accent",
-  },
-  {
-    title: "Transferencias Gráficas",
-    subtitle: "Técnicas de impresión creativa.",
-    date: "2 MAYO · 4:00 P.M.",
-    venue: "Arte Índigo",
-    audience: "8 a 13 años",
-    cost: "Cooperación",
-    icon: Paintbrush,
-    iconBg: "bg-coral/20",
-    iconColor: "text-coral",
-  },
-  {
-    title: "Fiesta de tambores",
-    subtitle: "Percusión y ritmo comunitario.",
-    date: "3 MAYO · 10:30 A.M.",
-    venue: "Ku'estudio",
-    audience: "Desde 2 años",
-    cost: "Entrada Libre (registro previo)",
-    icon: Drum,
-    iconBg: "bg-peach/30",
-    iconColor: "text-coral",
-  },
-];
+import { Link } from "react-router-dom";
+import { talleres } from "@/data/events";
 
 const WorkshopsSection = () => {
   return (
@@ -62,7 +16,7 @@ const WorkshopsSection = () => {
           {talleres.map((taller) => {
             const Icon = taller.icon;
             return (
-              <div key={taller.title} className="workshop-card p-6 flex items-start gap-5">
+              <div key={taller.slug} className="workshop-card p-6 flex items-start gap-5">
                 <div className={`w-14 h-14 rounded-2xl ${taller.iconBg} flex items-center justify-center shrink-0`}>
                   <Icon className={`w-6 h-6 ${taller.iconColor}`} />
                 </div>
@@ -73,16 +27,14 @@ const WorkshopsSection = () => {
                   <p className="text-sm text-warm-brown/60 mb-3">{taller.subtitle}</p>
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="text-[11px] font-semibold uppercase tracking-wider bg-warm-brown/10 text-warm-brown/70 px-3 py-1 rounded-full">
-                      {taller.date}
+                      {taller.date} · {taller.time}
                     </span>
-                    <a
-                      href="https://wa.me/524447027037"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to={`/taller/${taller.slug}`}
                       className="text-sm font-semibold text-accent hover:underline"
                     >
-                      Inscribirme →
-                    </a>
+                      Ver detalle →
+                    </Link>
                   </div>
                   <p className="text-[10px] text-warm-brown/40 mt-2">{taller.venue} · {taller.audience}</p>
                 </div>
