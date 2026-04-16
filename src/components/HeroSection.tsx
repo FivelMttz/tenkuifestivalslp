@@ -1,4 +1,9 @@
+import HeroCarousel from "@/components/HeroCarousel";
+import { useEvents } from "@/contexts/EventContext";
+
 const HeroSection = () => {
+  const { heroImages } = useEvents();
+
   return (
     <section id="inicio" className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
       {/* Decorative shapes */}
@@ -48,6 +53,13 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
+
+        {/* Hero Carousel */}
+        {heroImages.length > 0 && (
+          <div className="max-w-4xl">
+            <HeroCarousel images={heroImages} />
+          </div>
+        )}
       </div>
     </section>
   );

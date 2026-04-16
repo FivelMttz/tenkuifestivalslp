@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
-import { obras } from "@/data/events";
+import { useEvents } from "@/contexts/EventContext";
 
 const TheaterSection = () => {
+  const { obras } = useEvents();
+
   return (
     <section id="obras" className="py-20">
       <div className="container mx-auto px-6">
@@ -17,6 +19,9 @@ const TheaterSection = () => {
             const Icon = obra.icon;
             return (
               <div key={obra.slug} className="ticket-card p-6 flex flex-col items-center text-center">
+                {obra.coverImage && (
+                  <img src={obra.coverImage} alt={obra.title} className="w-full h-32 object-cover rounded-lg mb-3" />
+                )}
                 <span className="text-xs uppercase tracking-[0.15em] font-semibold text-coral mb-1">
                   Admit One
                 </span>
@@ -28,7 +33,7 @@ const TheaterSection = () => {
                 </p>
 
                 <div className="mt-auto flex flex-col items-center gap-2">
-                  <Icon className="w-5 h-5 text-warm-brown/50" />
+                  {Icon && <Icon className="w-5 h-5 text-warm-brown/50" />}
                   <span className="text-xs font-medium text-warm-brown/70">{obra.venue}</span>
                   <span className="text-[10px] text-warm-brown/50">{obra.date} · {obra.time}</span>
                   <span className="text-[10px] bg-sage/50 text-warm-brown/60 px-2 py-0.5 rounded-full">
