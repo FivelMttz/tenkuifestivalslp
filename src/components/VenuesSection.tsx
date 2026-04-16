@@ -1,14 +1,6 @@
 import { MapPin } from "lucide-react";
-
-const sedes = [
-  { name: "Semillas Suzuki", address: "Alfredo M. Terrazas #305, Col. Tequisquiapan" },
-  { name: "Ku'estudio", address: "Av. Constitución #1105-B, Barrio de San Sebastián" },
-  { name: "Arte Índigo", address: "Martínez de Castro #106, Col. Centro" },
-  { name: "Casa de los títeres MONINI", address: "Morelos #1065, Zona Centro" },
-  { name: "Letrasconmás", address: "Prol. Santos Degollado #1220 esq. Ejército Nacional" },
-  { name: "I.P.B.A (CDC Raúl Gamboa)", address: "Av. Universidad esq. C. Negrete, Centro" },
-  { name: "MUNI (Museo Universitario)", address: "Av. Sierra Leona 550, Lomas 2da sección" },
-];
+import { Link } from "react-router-dom";
+import { sedes } from "@/data/events";
 
 const VenuesSection = () => {
   return (
@@ -20,16 +12,18 @@ const VenuesSection = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sedes.map((sede) => (
-            <div
-              key={sede.name}
-              className="bg-muted/30 border border-foreground/10 rounded-2xl p-5 flex items-start gap-3 hover:bg-muted/50 transition-colors"
+            <Link
+              key={sede.slug}
+              to={`/sede/${sede.slug}`}
+              className="bg-muted/30 border border-foreground/10 rounded-2xl p-5 flex items-start gap-3 hover:bg-muted/50 transition-colors group"
             >
               <MapPin className="w-5 h-5 text-coral mt-0.5 shrink-0" />
               <div>
-                <h3 className="font-semibold text-foreground text-sm">{sede.name}</h3>
+                <h3 className="font-semibold text-foreground text-sm group-hover:text-golden transition-colors">{sede.name}</h3>
                 <p className="text-xs text-muted-foreground">{sede.address}</p>
+                <span className="text-[10px] font-semibold text-accent mt-1 inline-block">Ver detalle →</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

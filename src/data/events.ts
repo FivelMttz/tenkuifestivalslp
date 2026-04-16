@@ -186,3 +186,87 @@ export const talleres: Taller[] = [
     tags: ["Ritmos afro-latinos", "Voz", "Percusión"],
   },
 ];
+
+export interface Sede {
+  slug: string;
+  name: string;
+  address: string;
+  description: string;
+  features: string[];
+  tags: string[];
+  eventsHere: string[];
+  mapQuery: string;
+}
+
+export const sedes: Sede[] = [
+  {
+    slug: "semillas-suzuki",
+    name: "Semillas Suzuki",
+    address: "Alfredo M. Terrazas #305, Col. Tequisquiapan",
+    description: "Un espacio dedicado a la pedagogía musical y el desarrollo artístico infantil, donde la música se convierte en herramienta de crecimiento y conexión familiar.",
+    features: ["Salón acústico", "Instrumentos de percusión", "Espacio para familias", "Estacionamiento cercano"],
+    tags: ["Música", "Pedagogía"],
+    eventsHere: ["Cuentacuentos (1 mayo · 12:00 p.m.)", "Galería Fanzinoteka (1 mayo · 11:30 a.m.)"],
+    mapQuery: "Semillas+Suzuki+Alfredo+M+Terrazas+305+San+Luis+Potosi",
+  },
+  {
+    slug: "kuestudio",
+    name: "Ku'estudio",
+    address: "Av. Constitución #1105-B, Barrio de San Sebastián",
+    description: "Espacio multidisciplinario dedicado a la experimentación artística y corporal, ideal para encuentros de percusión y movimiento comunitario.",
+    features: ["Espacio amplio", "Equipo de percusión", "Área al aire libre"],
+    tags: ["Multidisciplinario", "Barrio de San Sebastián"],
+    eventsHere: ["Fiesta de tambores (3 mayo · 10:30 a.m.)"],
+    mapQuery: "Ku+estudio+Constitucion+1105+San+Luis+Potosi",
+  },
+  {
+    slug: "arte-indigo",
+    name: "Arte Índigo",
+    address: "Martínez de Castro #106, Col. Centro",
+    description: "Taller y galería de artes visuales en el corazón del centro histórico, especializado en técnicas de grabado e impresión artística.",
+    features: ["Taller de grabado", "Galería de exposición", "Centro histórico", "Acceso peatonal"],
+    tags: ["Artes Plásticas", "Centro Histórico"],
+    eventsHere: ["Transferencias Gráficas (2 mayo · 4:00 p.m.)", "Los males invisibles (3 mayo · 4:00 p.m.)", "Galería Fanzinoteka (3 mayo · 3:30 p.m.)"],
+    mapQuery: "Martinez+de+Castro+106+San+Luis+Potosi",
+  },
+  {
+    slug: "casa-de-los-titeres-monini",
+    name: "Casa de los títeres MONINI",
+    address: "Morelos #1065, Zona Centro",
+    description: "Un espacio mágico en el corazón de San Luis Potosí dedicado al arte de los títeres y la imaginación. Teatro familiar con tradición y calidez.",
+    features: ["Espacio climatizado", "Acceso para carriolas", "Área de café y cuentos"],
+    tags: ["Teatro Familiar", "Centro Histórico"],
+    eventsHere: ["Pipí la noche (29 abril · 5:00 p.m.)"],
+    mapQuery: "Morelos+1065+Zona+Centro+San+Luis+Potosi",
+  },
+  {
+    slug: "letrasconmas",
+    name: "Letrasconmás",
+    address: "Prol. Santos Degollado #1220 esq. Ejército Nacional, Col. Burócrata",
+    description: "Librería y espacio de fomento a la lectura infantil, donde las historias cobran vida a través de talleres y encuentros literarios.",
+    features: ["Acervo infantil", "Rincón de lectura", "Espacio íntimo"],
+    tags: ["Literatura", "Fomento a la lectura"],
+    eventsHere: ["Entre libros y arrullos (2 mayo · 1:00 p.m.)"],
+    mapQuery: "Santos+Degollado+1220+San+Luis+Potosi",
+  },
+  {
+    slug: "ipba-cdc-raul-gamboa",
+    name: "I.P.B.A (CDC Raúl Gamboa)",
+    address: "Av. Universidad esq. C. Negrete, Centro",
+    description: "Centro de Difusión Cultural del Instituto Potosino de Bellas Artes. Un referente institucional para la programación escénica de la ciudad.",
+    features: ["Foro escénico", "Butacas", "Accesibilidad", "Estacionamiento"],
+    tags: ["Institucional", "Danza Teatro"],
+    eventsHere: ["DUANOP (30 abril · 4:30 y 5:30 p.m.)"],
+    mapQuery: "CDC+Raul+Gamboa+IPBA+San+Luis+Potosi",
+  },
+  {
+    slug: "muni-museo-universitario",
+    name: "MUNI (Museo Universitario)",
+    address: "Av. Sierra Leona 550, Lomas 2da sección",
+    description: "El Museo Universitario de la UASLP ofrece un espacio cultural de primer nivel para experiencias inmersivas y exposiciones artísticas.",
+    features: ["Salas de exposición", "Jardín", "Estacionamiento amplio", "Cafetería"],
+    tags: ["Museo", "Lomas"],
+    eventsHere: ["La raíz del nido (2 mayo · 10:00 a.m.)", "Galería Fanzinoteka (2 mayo · 9:30 a.m.)"],
+    mapQuery: "MUNI+Museo+Universitario+UASLP+Sierra+Leona+San+Luis+Potosi",
+  },
+];
