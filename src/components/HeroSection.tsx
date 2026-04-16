@@ -1,5 +1,10 @@
 import HeroCarousel from "@/components/HeroCarousel";
 import { useEvents } from "@/contexts/EventContext";
+import hero1 from "@/assets/hero-1.jpg";
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+
+const defaultHeroImages = [hero1, hero2, hero3];
 
 const HeroSection = () => {
   const { heroImages } = useEvents();
