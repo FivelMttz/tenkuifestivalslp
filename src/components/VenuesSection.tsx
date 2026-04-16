@@ -1,8 +1,10 @@
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { sedes } from "@/data/events";
+import { useEvents } from "@/contexts/EventContext";
 
 const VenuesSection = () => {
+  const { sedes } = useEvents();
+
   return (
     <section id="sedes" className="py-20">
       <div className="container mx-auto px-6">

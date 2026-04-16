@@ -1,4 +1,15 @@
+import HeroCarousel from "@/components/HeroCarousel";
+import { useEvents } from "@/contexts/EventContext";
+import hero1 from "@/assets/hero-1.jpg";
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+
+const defaultHeroImages = [hero1, hero2, hero3];
+
 const HeroSection = () => {
+  const { heroImages } = useEvents();
+  const displayImages = heroImages.length > 0 ? heroImages : defaultHeroImages;
+
   return (
     <section id="inicio" className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
       {/* Decorative shapes */}
@@ -47,6 +58,11 @@ const HeroSection = () => {
               Preventa 2 desde 24 abril · $140 / $100
             </div>
           </div>
+        </div>
+
+        {/* Hero Carousel */}
+        <div className="max-w-4xl">
+          <HeroCarousel images={displayImages} />
         </div>
       </div>
     </section>

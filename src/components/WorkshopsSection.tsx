@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
-import { talleres } from "@/data/events";
+import { useEvents } from "@/contexts/EventContext";
 
 const WorkshopsSection = () => {
+  const { talleres } = useEvents();
+
   return (
     <section id="talleres" className="py-20">
       <div className="container mx-auto px-6">
@@ -17,9 +19,13 @@ const WorkshopsSection = () => {
             const Icon = taller.icon;
             return (
               <div key={taller.slug} className="workshop-card p-6 flex items-start gap-5">
-                <div className={`w-14 h-14 rounded-2xl ${taller.iconBg} flex items-center justify-center shrink-0`}>
-                  <Icon className={`w-6 h-6 ${taller.iconColor}`} />
-                </div>
+                {taller.coverImage ? (
+                  <img src={taller.coverImage} alt={taller.title} className="w-14 h-14 rounded-2xl object-cover shrink-0" />
+                ) : Icon ? (
+                  <div className={`w-14 h-14 rounded-2xl ${taller.iconBg} flex items-center justify-center shrink-0`}>
+                    <Icon className={`w-6 h-6 ${taller.iconColor}`} />
+                  </div>
+                ) : null}
                 <div className="flex-1 min-w-0">
                   <h3 className="font-serif text-lg font-bold text-warm-brown">
                     {taller.title}
