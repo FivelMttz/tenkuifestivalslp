@@ -1,14 +1,20 @@
 import HeroCarousel from "@/components/HeroCarousel";
 import { useEvents } from "@/contexts/EventContext";
+import { heroPaths } from "@/data/imagePaths";
 import hero1 from "@/assets/hero-1.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
 
-const defaultHeroImages = [hero1, hero2, hero3];
+const fallbackHero = [hero1, hero2, hero3];
 
 const HeroSection = () => {
   const { heroImages } = useEvents();
-  const displayImages = heroImages.length > 0 ? heroImages : defaultHeroImages;
+  // Prioridad: 1) imágenes en /public/images/hero/  2) admin (localStorage)  3) bundled fallback
+  const displayImages = heroPaths.length > 0
+    ? heroPaths
+    : heroImages.length > 0
+      ? heroImages
+      : fallbackHero;
 
   return (
     <section id="inicio" className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
