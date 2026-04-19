@@ -30,6 +30,7 @@ const AdminPanel = () => {
     { id: "sedes", label: "Sedes", icon: <MapPin className="w-4 h-4" /> },
     { id: "hero", label: "Hero Carousel", icon: <Image className="w-4 h-4" /> },
     { id: "calendario", label: "Calendario", icon: <Calendar className="w-4 h-4" /> },
+    { id: "rutas", label: "Rutas de imágenes", icon: <FolderTree className="w-4 h-4" /> },
   ];
 
   return (
@@ -75,6 +76,7 @@ const AdminPanel = () => {
           {tab === "sedes" && <SedesTab sedes={sedes} updateSede={updateSede} />}
           {tab === "hero" && <HeroTab images={heroImages} setImages={setHeroImages} />}
           {tab === "calendario" && <CalendarioTab obras={obras} talleres={talleres} />}
+          {tab === "rutas" && <RutasTab />}
         </main>
       </div>
     </div>
