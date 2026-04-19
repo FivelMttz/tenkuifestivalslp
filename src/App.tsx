@@ -20,7 +20,7 @@ const App = () => (
       <EventProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename="/tenkuifestivalslp">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/obra/:slug" element={<ObraDetail />} />
