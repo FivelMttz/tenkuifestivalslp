@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useEvents } from "@/contexts/EventContext";
 import {
   Settings, Theater, Palette, MapPin, Image, Calendar, Save, Trash2, Plus,
-  ArrowLeft, X
+  ArrowLeft, X, FolderTree, Copy, Check
 } from "lucide-react";
+import { imageManifest } from "@/data/imagePaths";
 
-type Tab = "config" | "obras" | "talleres" | "sedes" | "hero" | "calendario";
+type Tab = "config" | "obras" | "talleres" | "sedes" | "hero" | "calendario" | "rutas";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
