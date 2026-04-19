@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/tenkuifestivalslp/", // <--- ESTA ES LA LÍNEA CLAVE
+  base: "/tenkuifestivalslp/",
   server: {
     host: "::",
     port: 8080,
