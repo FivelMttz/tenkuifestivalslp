@@ -23,7 +23,7 @@ const HeroCarousel = ({ images }: HeroCarouselProps) => {
 
   return (
     <div className="relative mt-12 rounded-3xl overflow-hidden">
-      <div className="aspect-[21/9] bg-warm-brown/10 relative">
+      <div className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] bg-warm-brown/10 relative">
         {images.map((img, i) => (
           <img
             key={i}
