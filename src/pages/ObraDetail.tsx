@@ -124,6 +124,7 @@ const ObraDetail = () => {
       </section>
 
       <Footer />
+      <MobileBackButton />
     </div>
   );
 };
