@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEvents } from "@/contexts/EventContext";
 import {
   Settings, Theater, Palette, MapPin, Image, Calendar, Save, Trash2, Plus,
-  ArrowLeft, X
+  ArrowLeft, X, Upload, Download, FileJson
 } from "lucide-react";
+import { fileToDataUrl, downloadJson, readJsonFile } from "@/lib/imageUpload";
+import { toast } from "sonner";
 
 type Tab = "config" | "obras" | "talleres" | "sedes" | "hero" | "calendario";
 
