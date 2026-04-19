@@ -15,8 +15,29 @@ const AdminPanel = () => {
   const {
     obras, talleres, sedes, config, heroImages,
     updateObra, updateTaller, updateSede, setConfig, setHeroImages,
+    exportData, importData,
   } = useEvents();
   const [tab, setTab] = useState<Tab>("config");
+  const importRef = useRef<HTMLInputElement>(null);
+
+  const handleExport = () => {
+    downloadJson(exportData(), "tenkui-data.json");
+    toast.success("Configuración exportada. Súbela a /public/tenkui-data.json en tu repo.");
+  };
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const data = await readJsonFile(file);
+      importData(data);
+      toast.success("Configuración importada correctamente.");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Error al importar.");
+    } finally {
+      e.target.value = "";
+    }
+  };
 
   useEffect(() => {
     if (sessionStorage.getItem("tenkui_admin") !== "1") {
