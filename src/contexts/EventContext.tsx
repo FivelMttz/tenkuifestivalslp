@@ -42,8 +42,6 @@ interface EventContextType {
   updateObra: (slug: string, data: Partial<ObraWithImages>) => void;
   updateTaller: (slug: string, data: Partial<TallerWithImages>) => void;
   updateSede: (slug: string, data: Partial<SedeWithImages>) => void;
-  exportData: () => any;
-  importData: (data: any) => void;
 }
 
 const defaultConfig: GlobalConfig = {
@@ -85,39 +83,14 @@ export const EventProvider = ({ children }: { children: ReactNode }) => {
   const [config, setConfig] = useState<GlobalConfig>(stored?.config ?? defaultConfig);
   const [heroImages, setHeroImages] = useState<string[]>(stored?.heroImages ?? []);
 
-  // On first ever load (no localStorage), try to fetch a static JSON shipped
-  // with the build (e.g. /public/tenkui-data.json) so visitors of the published
-  // site see the curated data without needing localStorage.
   useEffect(() => {
-    if (stored) return;
-    const base = import.meta.env.BASE_URL || "/";
-    fetch(`${base}tenkui-data.json`, { cache: "no-cache" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (!data) return;
-        if (data.obras) setObras(data.obras.map((o: any) => {
-          const original = defaultObras.find((d) => d.slug === o.slug);
-          return { ...(original ?? {}), ...o };
-        }));
-        if (data.talleres) setTalleres(data.talleres.map((t: any) => {
-          const original = defaultTalleres.find((d) => d.slug === t.slug);
-          return { ...(original ?? {}), ...t };
-        }));
-        if (data.sedes) setSedes(data.sedes);
-        if (data.config) setConfig(data.config);
-        if (data.heroImages) setHeroImages(data.heroImages);
-      })
-      .catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    saveToStorage({
+    // Strip icon functions before saving (they can't be serialized)
+    saveToStorage({ 
       obras: obras.map(({ icon, ...rest }) => rest),
       talleres: talleres.map(({ icon, ...rest }) => rest),
-      sedes,
-      config,
-      heroImages,
+      sedes, 
+      config, 
+      heroImages 
     });
   }, [obras, talleres, sedes, config, heroImages]);
 
@@ -133,39 +106,11 @@ export const EventProvider = ({ children }: { children: ReactNode }) => {
     setSedes(prev => prev.map(s => s.slug === slug ? { ...s, ...data } : s));
   };
 
-  const exportData = () => ({
-    obras: obras.map(({ icon, ...rest }) => rest),
-    talleres: talleres.map(({ icon, ...rest }) => rest),
-    sedes,
-    config,
-    heroImages,
-    exportedAt: new Date().toISOString(),
-  });
-
-  const importData = (data: any) => {
-    if (data.obras) {
-      setObras(data.obras.map((o: any) => {
-        const original = defaultObras.find((d) => d.slug === o.slug);
-        return { ...(original ?? {}), ...o };
-      }));
-    }
-    if (data.talleres) {
-      setTalleres(data.talleres.map((t: any) => {
-        const original = defaultTalleres.find((d) => d.slug === t.slug);
-        return { ...(original ?? {}), ...t };
-      }));
-    }
-    if (data.sedes) setSedes(data.sedes);
-    if (data.config) setConfig(data.config);
-    if (data.heroImages) setHeroImages(data.heroImages);
-  };
-
   return (
     <EventContext.Provider value={{
       obras, talleres, sedes, config, heroImages,
       setObras, setTalleres, setSedes, setConfig, setHeroImages,
       updateObra, updateTaller, updateSede,
-      exportData, importData,
     }}>
       {children}
     </EventContext.Provider>

@@ -4,7 +4,6 @@ import { useEvents } from "@/contexts/EventContext";
 import ImageCarousel from "@/components/ImageCarousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MobileBackButton from "@/components/MobileBackButton";
 
 const ObraDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -39,15 +38,15 @@ const ObraDetail = () => {
             <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-golden blur-3xl" />
             <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-coral blur-3xl" />
           </div>
-          <div className="relative container mx-auto px-6 py-12 sm:py-24">
+          <div className="relative container mx-auto px-6 py-16 sm:py-24">
             <Link to="/#obras" className="inline-flex items-center gap-2 text-foreground/70 hover:text-foreground text-sm mb-6 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Volver a cartelera
             </Link>
             <span className="inline-flex items-center gap-2 bg-foreground/10 backdrop-blur-sm text-foreground/90 text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-4">
               <Ticket className="w-3 h-3" /> {obra.category}
             </span>
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-3 leading-tight">{obra.title}</h1>
-            <p className="text-foreground/70 text-base sm:text-lg">{obra.company}</p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-3">{obra.title}</h1>
+            <p className="text-foreground/70 text-lg">{obra.company}</p>
           </div>
         </div>
       </section>
@@ -124,7 +123,6 @@ const ObraDetail = () => {
       </section>
 
       <Footer />
-      <MobileBackButton />
     </div>
   );
 };

@@ -1,12 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEvents } from "@/contexts/EventContext";
 import {
   Settings, Theater, Palette, MapPin, Image, Calendar, Save, Trash2, Plus,
-  ArrowLeft, X, Upload, Download, FileJson
+  ArrowLeft, X
 } from "lucide-react";
-import { fileToDataUrl, downloadJson, readJsonFile } from "@/lib/imageUpload";
-import { toast } from "sonner";
 
 type Tab = "config" | "obras" | "talleres" | "sedes" | "hero" | "calendario";
 
@@ -15,29 +13,8 @@ const AdminPanel = () => {
   const {
     obras, talleres, sedes, config, heroImages,
     updateObra, updateTaller, updateSede, setConfig, setHeroImages,
-    exportData, importData,
   } = useEvents();
   const [tab, setTab] = useState<Tab>("config");
-  const importRef = useRef<HTMLInputElement>(null);
-
-  const handleExport = () => {
-    downloadJson(exportData(), "tenkui-data.json");
-    toast.success("Configuración exportada. Súbela a /public/tenkui-data.json en tu repo.");
-  };
-
-  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      const data = await readJsonFile(file);
-      importData(data);
-      toast.success("Configuración importada correctamente.");
-    } catch (err: any) {
-      toast.error(err?.message ?? "Error al importar.");
-    } finally {
-      e.target.value = "";
-    }
-  };
 
   useEffect(() => {
     if (sessionStorage.getItem("tenkui_admin") !== "1") {
@@ -57,61 +34,29 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
-      <div className="bg-warm-brown text-cream px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-3 min-w-0">
-          <button onClick={() => navigate("/")} className="hover:opacity-70 transition-opacity shrink-0">
+      <div className="bg-warm-brown text-cream px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate("/")} className="hover:opacity-70 transition-opacity">
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <span className="font-serif font-bold text-base sm:text-lg truncate">Admin · Tënkui 2026</span>
+          <span className="font-serif font-bold text-lg">Admin · Tënkui 2026</span>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleExport}
-            title="Descarga un JSON con todos los datos e imágenes"
-            className="flex items-center gap-1.5 text-xs sm:text-sm bg-cream/10 hover:bg-cream/20 px-3 py-1.5 rounded-lg transition-colors"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Exportar JSON</span>
-          </button>
-          <button
-            onClick={() => importRef.current?.click()}
-            title="Cargar un JSON exportado previamente"
-            className="flex items-center gap-1.5 text-xs sm:text-sm bg-cream/10 hover:bg-cream/20 px-3 py-1.5 rounded-lg transition-colors"
-          >
-            <Upload className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Importar</span>
-          </button>
-          <input
-            ref={importRef}
-            type="file"
-            accept="application/json"
-            onChange={handleImportFile}
-            className="hidden"
-          />
-          <button
-            onClick={() => { sessionStorage.removeItem("tenkui_admin"); navigate("/admin"); }}
-            className="text-xs sm:text-sm text-cream/70 hover:text-cream ml-1"
-          >
-            Salir
-          </button>
-        </div>
+        <button
+          onClick={() => { sessionStorage.removeItem("tenkui_admin"); navigate("/admin"); }}
+          className="text-sm text-cream/70 hover:text-cream"
+        >
+          Cerrar sesión
+        </button>
       </div>
 
-      {/* Info banner about persistence */}
-      <div className="bg-golden/15 border-b border-golden/30 px-4 sm:px-6 py-2 flex items-start gap-2 text-xs text-warm-brown">
-        <FileJson className="w-4 h-4 shrink-0 mt-0.5" />
-        <span>
-          Los cambios se guardan en este navegador. Para publicarlos en GitHub Pages: <strong>Exporta el JSON</strong> y súbelo a <code className="bg-warm-brown/10 px-1 rounded">public/tenkui-data.json</code> de tu repo.
-        </span>
-      </div>
-
-      <div className="flex flex-col md:flex-row min-h-[calc(100vh-100px)]">
-        <aside className="md:w-56 bg-cream border-b md:border-b-0 md:border-r border-warm-brown/10 p-3 md:p-4 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible shrink-0">
+      <div className="flex min-h-[calc(100vh-52px)]">
+        {/* Sidebar */}
+        <aside className="w-56 bg-cream border-r border-warm-brown/10 p-4 space-y-1 shrink-0">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`shrink-0 md:w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${
+              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 tab === t.id ? "bg-terracotta text-foreground" : "text-warm-brown hover:bg-warm-brown/10"
               }`}
             >
@@ -121,7 +66,8 @@ const AdminPanel = () => {
           ))}
         </aside>
 
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+        {/* Main */}
+        <main className="flex-1 p-6 overflow-y-auto">
           {tab === "config" && <ConfigTab config={config} setConfig={setConfig} />}
           {tab === "obras" && <ObrasTab obras={obras} updateObra={updateObra} />}
           {tab === "talleres" && <TalleresTab talleres={talleres} updateTaller={updateTaller} />}
@@ -217,14 +163,9 @@ function GalleryEditor({ coverImage, gallery, onUpdate }: {
   const [cover, setCover] = useState(coverImage || "");
   const [imgs, setImgs] = useState(gallery || []);
   const [newUrl, setNewUrl] = useState("");
-  const coverFileRef = useRef<HTMLInputElement>(null);
-  const galleryFileRef = useRef<HTMLInputElement>(null);
 
-  const save = () => {
-    onUpdate({ coverImage: cover, gallery: imgs });
-    toast.success("Imágenes guardadas");
-  };
-  const addImageUrl = () => {
+  const save = () => onUpdate({ coverImage: cover, gallery: imgs });
+  const addImage = () => {
     if (newUrl.trim()) {
       setImgs([...imgs, { url: newUrl.trim(), alt: "" }]);
       setNewUrl("");
@@ -232,40 +173,13 @@ function GalleryEditor({ coverImage, gallery, onUpdate }: {
   };
   const removeImage = (i: number) => setImgs(imgs.filter((_, idx) => idx !== i));
 
-  const handleCoverFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try { setCover(await fileToDataUrl(file)); }
-    catch (err: any) { toast.error(err.message); }
-    finally { e.target.value = ""; }
-  };
-
-  const handleGalleryFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    try {
-      const newOnes = await Promise.all(files.map(async (f) => ({
-        url: await fileToDataUrl(f),
-        alt: f.name,
-      })));
-      setImgs([...imgs, ...newOnes]);
-    } catch (err: any) { toast.error(err.message); }
-    finally { e.target.value = ""; }
-  };
-
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-xs text-warm-brown/60 block mb-1">Imagen de portada</label>
-        <div className="flex gap-2">
-          <input value={cover} onChange={(e) => setCover(e.target.value)}
-            className="flex-1 bg-cream-light border border-warm-brown/20 rounded-xl px-3 py-2 text-warm-brown text-sm"
-            placeholder="URL https://... o sube un archivo" />
-          <button type="button" onClick={() => coverFileRef.current?.click()}
-            className="bg-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-semibold hover:bg-accent/30 flex items-center gap-1">
-            <Upload className="w-4 h-4" />
-          </button>
-          <input ref={coverFileRef} type="file" accept="image/*" onChange={handleCoverFile} className="hidden" />
-        </div>
+        <label className="text-xs text-warm-brown/60 block mb-1">Imagen de portada (URL)</label>
+        <input value={cover} onChange={(e) => setCover(e.target.value)}
+          className="w-full bg-cream-light border border-warm-brown/20 rounded-xl px-3 py-2 text-warm-brown text-sm"
+          placeholder="https://..." />
         {cover && <img src={cover} alt="preview" className="mt-2 h-24 rounded-lg object-cover" />}
       </div>
       <div>
@@ -284,14 +198,9 @@ function GalleryEditor({ coverImage, gallery, onUpdate }: {
           <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)}
             className="flex-1 bg-cream-light border border-warm-brown/20 rounded-xl px-3 py-2 text-warm-brown text-sm"
             placeholder="URL de imagen..." />
-          <button onClick={addImageUrl} className="bg-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-semibold hover:bg-accent/30">
+          <button onClick={addImage} className="bg-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-semibold hover:bg-accent/30">
             <Plus className="w-4 h-4" />
           </button>
-          <button type="button" onClick={() => galleryFileRef.current?.click()}
-            className="bg-golden/20 text-warm-brown px-3 py-2 rounded-xl text-sm font-semibold hover:bg-golden/30 flex items-center gap-1">
-            <Upload className="w-4 h-4" />
-          </button>
-          <input ref={galleryFileRef} type="file" accept="image/*" multiple onChange={handleGalleryFiles} className="hidden" />
         </div>
       </div>
       <button onClick={save} className="flex items-center gap-2 bg-golden/20 text-warm-brown px-4 py-2 rounded-xl text-sm font-semibold hover:bg-golden/30">
@@ -502,8 +411,6 @@ function SedesTab({ sedes, updateSede }: any) {
 /* ─── Hero Images Tab ─── */
 function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: string[]) => void }) {
   const [newUrl, setNewUrl] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
-
   const add = () => {
     if (newUrl.trim()) {
       setImages([...images, newUrl.trim()]);
@@ -512,20 +419,10 @@ function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: st
   };
   const remove = (i: number) => setImages(images.filter((_, idx) => idx !== i));
 
-  const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    try {
-      const urls = await Promise.all(files.map((f) => fileToDataUrl(f)));
-      setImages([...images, ...urls]);
-      toast.success(`${urls.length} imagen(es) agregada(s)`);
-    } catch (err: any) { toast.error(err.message); }
-    finally { e.target.value = ""; }
-  };
-
   return (
     <div className="max-w-2xl space-y-6">
       <h2 className="font-serif text-2xl font-bold text-foreground">Carousel del Hero</h2>
-      <p className="text-sm text-muted-foreground">Imágenes que aparecen en la sección principal. Puedes pegar una URL o subir un archivo.</p>
+      <p className="text-sm text-muted-foreground">Imágenes que aparecen en la sección principal de la página de inicio.</p>
 
       <div className="flex gap-2">
         <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)}
@@ -534,19 +431,14 @@ function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: st
         <button onClick={add} className="bg-accent text-accent-foreground px-4 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90">
           <Plus className="w-4 h-4" />
         </button>
-        <button type="button" onClick={() => fileRef.current?.click()}
-          className="bg-golden/30 text-warm-brown px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-golden/40 flex items-center gap-1.5">
-          <Upload className="w-4 h-4" /> Subir
-        </button>
-        <input ref={fileRef} type="file" accept="image/*" multiple onChange={handleFiles} className="hidden" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {images.map((img, i) => (
           <div key={i} className="relative rounded-xl overflow-hidden group">
             <img src={img} alt="" className="w-full aspect-video object-cover" />
             <button onClick={() => remove(i)}
-              className="absolute top-2 right-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+              className="absolute top-2 right-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <Trash2 className="w-3 h-3" />
             </button>
           </div>
@@ -555,7 +447,7 @@ function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: st
 
       {!images.length && (
         <div className="bg-cream rounded-2xl p-8 text-center text-warm-brown/50 text-sm">
-          Aún no hay imágenes. Agrega URLs o sube archivos para que aparezcan en el carousel.
+          Aún no hay imágenes. Agrega URLs para que aparezcan en el carousel.
         </div>
       )}
     </div>

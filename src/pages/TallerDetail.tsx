@@ -4,7 +4,6 @@ import { useEvents } from "@/contexts/EventContext";
 import ImageCarousel from "@/components/ImageCarousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MobileBackButton from "@/components/MobileBackButton";
 
 const TallerDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -38,15 +37,15 @@ const TallerDetail = () => {
             <div className="absolute top-10 right-10 w-40 h-40 rounded-full bg-golden blur-3xl" />
             <div className="absolute bottom-10 left-10 w-60 h-60 rounded-full bg-sage blur-3xl" />
           </div>
-          <div className="relative container mx-auto px-6 py-12 sm:py-24">
+          <div className="relative container mx-auto px-6 py-16 sm:py-24">
             <Link to="/#talleres" className="inline-flex items-center gap-2 text-foreground/70 hover:text-foreground text-sm mb-6 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Volver a talleres
             </Link>
             <span className="inline-flex items-center gap-2 bg-foreground/10 backdrop-blur-sm text-foreground/90 text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-4">
               <Sparkles className="w-3 h-3" /> Taller
             </span>
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-3 leading-tight">{taller.title}</h1>
-            <p className="text-foreground/70 text-base sm:text-lg">{taller.subtitle}</p>
+            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-3">{taller.title}</h1>
+            <p className="text-foreground/70 text-lg">{taller.subtitle}</p>
           </div>
         </div>
       </section>
@@ -126,7 +125,6 @@ const TallerDetail = () => {
       </section>
 
       <Footer />
-      <MobileBackButton />
     </div>
   );
 };

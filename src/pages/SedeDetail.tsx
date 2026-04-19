@@ -4,7 +4,6 @@ import { useEvents } from "@/contexts/EventContext";
 import ImageCarousel from "@/components/ImageCarousel";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import MobileBackButton from "@/components/MobileBackButton";
 
 const SedeDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -112,7 +111,6 @@ const SedeDetail = () => {
       </section>
 
       <Footer />
-      <MobileBackButton />
     </div>
   );
 };
