@@ -57,29 +57,61 @@ const AdminPanel = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
-      <div className="bg-warm-brown text-cream px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate("/")} className="hover:opacity-70 transition-opacity">
+      <div className="bg-warm-brown text-cream px-4 sm:px-6 py-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3 min-w-0">
+          <button onClick={() => navigate("/")} className="hover:opacity-70 transition-opacity shrink-0">
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <span className="font-serif font-bold text-lg">Admin · Tënkui 2026</span>
+          <span className="font-serif font-bold text-base sm:text-lg truncate">Admin · Tënkui 2026</span>
         </div>
-        <button
-          onClick={() => { sessionStorage.removeItem("tenkui_admin"); navigate("/admin"); }}
-          className="text-sm text-cream/70 hover:text-cream"
-        >
-          Cerrar sesión
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExport}
+            title="Descarga un JSON con todos los datos e imágenes"
+            className="flex items-center gap-1.5 text-xs sm:text-sm bg-cream/10 hover:bg-cream/20 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Exportar JSON</span>
+          </button>
+          <button
+            onClick={() => importRef.current?.click()}
+            title="Cargar un JSON exportado previamente"
+            className="flex items-center gap-1.5 text-xs sm:text-sm bg-cream/10 hover:bg-cream/20 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Importar</span>
+          </button>
+          <input
+            ref={importRef}
+            type="file"
+            accept="application/json"
+            onChange={handleImportFile}
+            className="hidden"
+          />
+          <button
+            onClick={() => { sessionStorage.removeItem("tenkui_admin"); navigate("/admin"); }}
+            className="text-xs sm:text-sm text-cream/70 hover:text-cream ml-1"
+          >
+            Salir
+          </button>
+        </div>
       </div>
 
-      <div className="flex min-h-[calc(100vh-52px)]">
-        {/* Sidebar */}
-        <aside className="w-56 bg-cream border-r border-warm-brown/10 p-4 space-y-1 shrink-0">
+      {/* Info banner about persistence */}
+      <div className="bg-golden/15 border-b border-golden/30 px-4 sm:px-6 py-2 flex items-start gap-2 text-xs text-warm-brown">
+        <FileJson className="w-4 h-4 shrink-0 mt-0.5" />
+        <span>
+          Los cambios se guardan en este navegador. Para publicarlos en GitHub Pages: <strong>Exporta el JSON</strong> y súbelo a <code className="bg-warm-brown/10 px-1 rounded">public/tenkui-data.json</code> de tu repo.
+        </span>
+      </div>
+
+      <div className="flex flex-col md:flex-row min-h-[calc(100vh-100px)]">
+        <aside className="md:w-56 bg-cream border-b md:border-b-0 md:border-r border-warm-brown/10 p-3 md:p-4 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible shrink-0">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+              className={`shrink-0 md:w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap ${
                 tab === t.id ? "bg-terracotta text-foreground" : "text-warm-brown hover:bg-warm-brown/10"
               }`}
             >
@@ -89,8 +121,7 @@ const AdminPanel = () => {
           ))}
         </aside>
 
-        {/* Main */}
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
           {tab === "config" && <ConfigTab config={config} setConfig={setConfig} />}
           {tab === "obras" && <ObrasTab obras={obras} updateObra={updateObra} />}
           {tab === "talleres" && <TalleresTab talleres={talleres} updateTaller={updateTaller} />}
