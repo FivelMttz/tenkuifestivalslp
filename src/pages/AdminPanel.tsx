@@ -499,4 +499,85 @@ function CalendarioTab({ obras, talleres }: any) {
   );
 }
 
+/* ─── Rutas de imágenes Tab (read-only) ─── */
+function RutasTab() {
+  const [copied, setCopied] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>("");
+
+  const copy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(text);
+    setTimeout(() => setCopied(null), 1500);
+  };
+
+  const grouped = imageManifest.reduce<Record<string, typeof imageManifest>>((acc, item) => {
+    const key = `${item.category} · ${item.group}`;
+    (acc[key] = acc[key] || []).push(item);
+    return acc;
+  }, {});
+
+  const filtered = Object.entries(grouped).filter(([key]) =>
+    key.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-6 max-w-4xl">
+      <div>
+        <h2 className="font-serif text-2xl font-bold text-foreground">Rutas de imágenes</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Lista de todos los archivos que el sitio espera encontrar en el repositorio.
+          Reemplaza el archivo en la ruta indicada (mismo nombre) y haz commit para
+          actualizar la imagen automáticamente.
+        </p>
+      </div>
+
+      <div className="bg-golden/10 border border-golden/30 rounded-2xl p-4 text-sm text-warm-brown">
+        📄 Documento completo: <code className="bg-cream px-2 py-0.5 rounded">IMAGENES.md</code> (raíz del repo).
+        <br />
+        📁 Carpeta base: <code className="bg-cream px-2 py-0.5 rounded">public/images/</code>
+      </div>
+
+      <input
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        placeholder="Filtrar por nombre, categoría o slug..."
+        className="w-full bg-cream border border-warm-brown/20 rounded-xl px-4 py-2.5 text-warm-brown text-sm"
+      />
+
+      <div className="space-y-4">
+        {filtered.map(([groupName, items]) => (
+          <div key={groupName} className="bg-cream rounded-2xl p-5">
+            <h3 className="font-serif font-bold text-warm-brown mb-3">{groupName}</h3>
+            <div className="space-y-2">
+              {items.map((item) => (
+                <div key={item.publicPath} className="flex items-center gap-3 bg-cream-light rounded-xl p-3">
+                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full shrink-0 ${
+                    item.role === "Portada" ? "bg-coral/20 text-coral" :
+                    item.role === "Hero" ? "bg-golden/20 text-warm-brown" :
+                    "bg-accent/20 text-accent"
+                  }`}>
+                    {item.role}
+                  </span>
+                  <code className="flex-1 text-xs text-warm-brown truncate font-mono">
+                    {item.publicPath}
+                  </code>
+                  <button
+                    onClick={() => copy(item.publicPath)}
+                    className="shrink-0 text-warm-brown/60 hover:text-warm-brown p-1.5 rounded-lg hover:bg-warm-brown/10"
+                    title="Copiar ruta"
+                  >
+                    {copied === item.publicPath
+                      ? <Check className="w-3.5 h-3.5 text-accent" />
+                      : <Copy className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default AdminPanel;
