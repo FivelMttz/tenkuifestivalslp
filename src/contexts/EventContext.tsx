@@ -42,6 +42,8 @@ interface EventContextType {
   updateObra: (slug: string, data: Partial<ObraWithImages>) => void;
   updateTaller: (slug: string, data: Partial<TallerWithImages>) => void;
   updateSede: (slug: string, data: Partial<SedeWithImages>) => void;
+  exportData: () => any;
+  importData: (data: any) => void;
 }
 
 const defaultConfig: GlobalConfig = {
