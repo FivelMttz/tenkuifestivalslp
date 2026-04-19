@@ -108,11 +108,39 @@ export const EventProvider = ({ children }: { children: ReactNode }) => {
     setSedes(prev => prev.map(s => s.slug === slug ? { ...s, ...data } : s));
   };
 
+  const exportData = () => ({
+    obras: obras.map(({ icon, ...rest }) => rest),
+    talleres: talleres.map(({ icon, ...rest }) => rest),
+    sedes,
+    config,
+    heroImages,
+    exportedAt: new Date().toISOString(),
+  });
+
+  const importData = (data: any) => {
+    if (data.obras) {
+      setObras(data.obras.map((o: any) => {
+        const original = defaultObras.find((d) => d.slug === o.slug);
+        return { ...(original ?? {}), ...o };
+      }));
+    }
+    if (data.talleres) {
+      setTalleres(data.talleres.map((t: any) => {
+        const original = defaultTalleres.find((d) => d.slug === t.slug);
+        return { ...(original ?? {}), ...t };
+      }));
+    }
+    if (data.sedes) setSedes(data.sedes);
+    if (data.config) setConfig(data.config);
+    if (data.heroImages) setHeroImages(data.heroImages);
+  };
+
   return (
     <EventContext.Provider value={{
       obras, talleres, sedes, config, heroImages,
       setObras, setTalleres, setSedes, setConfig, setHeroImages,
       updateObra, updateTaller, updateSede,
+      exportData, importData,
     }}>
       {children}
     </EventContext.Provider>
