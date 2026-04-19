@@ -502,6 +502,8 @@ function SedesTab({ sedes, updateSede }: any) {
 /* ─── Hero Images Tab ─── */
 function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: string[]) => void }) {
   const [newUrl, setNewUrl] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const add = () => {
     if (newUrl.trim()) {
       setImages([...images, newUrl.trim()]);
@@ -510,10 +512,20 @@ function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: st
   };
   const remove = (i: number) => setImages(images.filter((_, idx) => idx !== i));
 
+  const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    try {
+      const urls = await Promise.all(files.map((f) => fileToDataUrl(f)));
+      setImages([...images, ...urls]);
+      toast.success(`${urls.length} imagen(es) agregada(s)`);
+    } catch (err: any) { toast.error(err.message); }
+    finally { e.target.value = ""; }
+  };
+
   return (
     <div className="max-w-2xl space-y-6">
       <h2 className="font-serif text-2xl font-bold text-foreground">Carousel del Hero</h2>
-      <p className="text-sm text-muted-foreground">Imágenes que aparecen en la sección principal de la página de inicio.</p>
+      <p className="text-sm text-muted-foreground">Imágenes que aparecen en la sección principal. Puedes pegar una URL o subir un archivo.</p>
 
       <div className="flex gap-2">
         <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)}
@@ -522,14 +534,19 @@ function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: st
         <button onClick={add} className="bg-accent text-accent-foreground px-4 py-2.5 rounded-xl font-semibold text-sm hover:opacity-90">
           <Plus className="w-4 h-4" />
         </button>
+        <button type="button" onClick={() => fileRef.current?.click()}
+          className="bg-golden/30 text-warm-brown px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-golden/40 flex items-center gap-1.5">
+          <Upload className="w-4 h-4" /> Subir
+        </button>
+        <input ref={fileRef} type="file" accept="image/*" multiple onChange={handleFiles} className="hidden" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {images.map((img, i) => (
           <div key={i} className="relative rounded-xl overflow-hidden group">
             <img src={img} alt="" className="w-full aspect-video object-cover" />
             <button onClick={() => remove(i)}
-              className="absolute top-2 right-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              className="absolute top-2 right-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
               <Trash2 className="w-3 h-3" />
             </button>
           </div>
@@ -538,7 +555,7 @@ function HeroTab({ images, setImages }: { images: string[]; setImages: (imgs: st
 
       {!images.length && (
         <div className="bg-cream rounded-2xl p-8 text-center text-warm-brown/50 text-sm">
-          Aún no hay imágenes. Agrega URLs para que aparezcan en el carousel.
+          Aún no hay imágenes. Agrega URLs o sube archivos para que aparezcan en el carousel.
         </div>
       )}
     </div>
