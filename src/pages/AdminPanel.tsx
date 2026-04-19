@@ -217,9 +217,14 @@ function GalleryEditor({ coverImage, gallery, onUpdate }: {
   const [cover, setCover] = useState(coverImage || "");
   const [imgs, setImgs] = useState(gallery || []);
   const [newUrl, setNewUrl] = useState("");
+  const coverFileRef = useRef<HTMLInputElement>(null);
+  const galleryFileRef = useRef<HTMLInputElement>(null);
 
-  const save = () => onUpdate({ coverImage: cover, gallery: imgs });
-  const addImage = () => {
+  const save = () => {
+    onUpdate({ coverImage: cover, gallery: imgs });
+    toast.success("Imágenes guardadas");
+  };
+  const addImageUrl = () => {
     if (newUrl.trim()) {
       setImgs([...imgs, { url: newUrl.trim(), alt: "" }]);
       setNewUrl("");
@@ -227,13 +232,40 @@ function GalleryEditor({ coverImage, gallery, onUpdate }: {
   };
   const removeImage = (i: number) => setImgs(imgs.filter((_, idx) => idx !== i));
 
+  const handleCoverFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try { setCover(await fileToDataUrl(file)); }
+    catch (err: any) { toast.error(err.message); }
+    finally { e.target.value = ""; }
+  };
+
+  const handleGalleryFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    try {
+      const newOnes = await Promise.all(files.map(async (f) => ({
+        url: await fileToDataUrl(f),
+        alt: f.name,
+      })));
+      setImgs([...imgs, ...newOnes]);
+    } catch (err: any) { toast.error(err.message); }
+    finally { e.target.value = ""; }
+  };
+
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-xs text-warm-brown/60 block mb-1">Imagen de portada (URL)</label>
-        <input value={cover} onChange={(e) => setCover(e.target.value)}
-          className="w-full bg-cream-light border border-warm-brown/20 rounded-xl px-3 py-2 text-warm-brown text-sm"
-          placeholder="https://..." />
+        <label className="text-xs text-warm-brown/60 block mb-1">Imagen de portada</label>
+        <div className="flex gap-2">
+          <input value={cover} onChange={(e) => setCover(e.target.value)}
+            className="flex-1 bg-cream-light border border-warm-brown/20 rounded-xl px-3 py-2 text-warm-brown text-sm"
+            placeholder="URL https://... o sube un archivo" />
+          <button type="button" onClick={() => coverFileRef.current?.click()}
+            className="bg-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-semibold hover:bg-accent/30 flex items-center gap-1">
+            <Upload className="w-4 h-4" />
+          </button>
+          <input ref={coverFileRef} type="file" accept="image/*" onChange={handleCoverFile} className="hidden" />
+        </div>
         {cover && <img src={cover} alt="preview" className="mt-2 h-24 rounded-lg object-cover" />}
       </div>
       <div>
@@ -252,9 +284,14 @@ function GalleryEditor({ coverImage, gallery, onUpdate }: {
           <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)}
             className="flex-1 bg-cream-light border border-warm-brown/20 rounded-xl px-3 py-2 text-warm-brown text-sm"
             placeholder="URL de imagen..." />
-          <button onClick={addImage} className="bg-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-semibold hover:bg-accent/30">
+          <button onClick={addImageUrl} className="bg-accent/20 text-accent px-3 py-2 rounded-xl text-sm font-semibold hover:bg-accent/30">
             <Plus className="w-4 h-4" />
           </button>
+          <button type="button" onClick={() => galleryFileRef.current?.click()}
+            className="bg-golden/20 text-warm-brown px-3 py-2 rounded-xl text-sm font-semibold hover:bg-golden/30 flex items-center gap-1">
+            <Upload className="w-4 h-4" />
+          </button>
+          <input ref={galleryFileRef} type="file" accept="image/*" multiple onChange={handleGalleryFiles} className="hidden" />
         </div>
       </div>
       <button onClick={save} className="flex items-center gap-2 bg-golden/20 text-warm-brown px-4 py-2 rounded-xl text-sm font-semibold hover:bg-golden/30">
