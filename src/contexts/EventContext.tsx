@@ -77,27 +77,36 @@ function saveToStorage(data: any) {
 
 /** Mezcla las rutas de imagePaths sobre los datos base, sin pisar valores ya editados por el admin. */
 function withObraImages(base: ObraWithImages[]): ObraWithImages[] {
-  return base.map(o => ({
-    coverImage: obraPaths[o.slug]?.cover,
-    gallery: obraPaths[o.slug]?.gallery.map(url => ({ url, alt: o.title })),
-    ...o, // los valores del admin tienen prioridad si ya existen
-  }));
+  return base.map(o => {
+    const paths = obraPaths[o.slug];
+    return {
+      ...o,
+      coverImage: o.coverImage || paths?.cover,
+      gallery: (o.gallery && o.gallery.length > 0) ? o.gallery : paths?.gallery.map(url => ({ url, alt: o.title })),
+    };
+  });
 }
 
 function withTallerImages(base: TallerWithImages[]): TallerWithImages[] {
-  return base.map(t => ({
-    coverImage: tallerPaths[t.slug]?.cover,
-    gallery: tallerPaths[t.slug]?.gallery.map(url => ({ url, alt: t.title })),
-    ...t,
-  }));
+  return base.map(t => {
+    const paths = tallerPaths[t.slug];
+    return {
+      ...t,
+      coverImage: t.coverImage || paths?.cover,
+      gallery: (t.gallery && t.gallery.length > 0) ? t.gallery : paths?.gallery.map(url => ({ url, alt: t.title })),
+    };
+  });
 }
 
 function withSedeImages(base: SedeWithImages[]): SedeWithImages[] {
-  return base.map(s => ({
-    coverImage: sedePaths[s.slug]?.cover,
-    gallery: sedePaths[s.slug]?.gallery.map(url => ({ url, alt: s.name })),
-    ...s,
-  }));
+  return base.map(s => {
+    const paths = sedePaths[s.slug];
+    return {
+      ...s,
+      coverImage: s.coverImage || paths?.cover,
+      gallery: (s.gallery && s.gallery.length > 0) ? s.gallery : paths?.gallery.map(url => ({ url, alt: s.name })),
+    };
+  });
 }
 
 export const EventProvider = ({ children }: { children: ReactNode }) => {
