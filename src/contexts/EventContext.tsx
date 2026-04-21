@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { obras as defaultObras, talleres as defaultTalleres, sedes as defaultSedes } from "@/data/events";
 import type { Obra, Taller, Sede } from "@/data/events";
+import { obraPaths, tallerPaths, sedePaths } from "@/data/imagePaths";
 
 export interface EventImage {
   url: string;
@@ -74,12 +75,43 @@ function saveToStorage(data: any) {
   } catch {}
 }
 
+/** Mezcla las rutas de imagePaths sobre los datos base, sin pisar valores ya editados por el admin. */
+function withObraImages(base: ObraWithImages[]): ObraWithImages[] {
+  return base.map(o => ({
+    coverImage: obraPaths[o.slug]?.cover,
+    gallery: obraPaths[o.slug]?.gallery.map(url => ({ url, alt: o.title })),
+    ...o, // los valores del admin tienen prioridad si ya existen
+  }));
+}
+
+function withTallerImages(base: TallerWithImages[]): TallerWithImages[] {
+  return base.map(t => ({
+    coverImage: tallerPaths[t.slug]?.cover,
+    gallery: tallerPaths[t.slug]?.gallery.map(url => ({ url, alt: t.title })),
+    ...t,
+  }));
+}
+
+function withSedeImages(base: SedeWithImages[]): SedeWithImages[] {
+  return base.map(s => ({
+    coverImage: sedePaths[s.slug]?.cover,
+    gallery: sedePaths[s.slug]?.gallery.map(url => ({ url, alt: s.name })),
+    ...s,
+  }));
+}
+
 export const EventProvider = ({ children }: { children: ReactNode }) => {
   const stored = loadFromStorage();
 
-  const [obras, setObras] = useState<ObraWithImages[]>(stored?.obras ?? defaultObras.map(o => ({ ...o })));
-  const [talleres, setTalleres] = useState<TallerWithImages[]>(stored?.talleres ?? defaultTalleres.map(t => ({ ...t })));
-  const [sedes, setSedes] = useState<SedeWithImages[]>(stored?.sedes ?? defaultSedes.map(s => ({ ...s })));
+  const [obras, setObras] = useState<ObraWithImages[]>(
+    withObraImages(stored?.obras ?? defaultObras.map(o => ({ ...o })))
+  );
+  const [talleres, setTalleres] = useState<TallerWithImages[]>(
+    withTallerImages(stored?.talleres ?? defaultTalleres.map(t => ({ ...t })))
+  );
+  const [sedes, setSedes] = useState<SedeWithImages[]>(
+    withSedeImages(stored?.sedes ?? defaultSedes.map(s => ({ ...s })))
+  );
   const [config, setConfig] = useState<GlobalConfig>(stored?.config ?? defaultConfig);
   const [heroImages, setHeroImages] = useState<string[]>(stored?.heroImages ?? []);
 
