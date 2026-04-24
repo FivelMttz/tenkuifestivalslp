@@ -104,7 +104,7 @@ const ObraDetail = () => {
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-full bg-peach/30 flex items-center justify-center shrink-0"><Ticket className="w-4 h-4 text-coral" /></div>
-                <div><p className="text-xs text-warm-brown/50">Costo</p><p className="font-semibold text-warm-brown">{obra.cost}</p></div>
+                <div><p className="text-xs text-warm-brown/50">Costo</p><p className="font-semibold text-warm-brown whitespace-pre-line">{obra.cost}</p></div>
               </div>
               <div className="bg-accent/10 rounded-xl px-4 py-3 flex items-center gap-2">
                 <Users className="w-4 h-4 text-accent" /><span className="text-sm font-medium text-accent">{obra.audience}</span>
