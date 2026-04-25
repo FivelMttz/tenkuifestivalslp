@@ -66,7 +66,7 @@ export const obras: Obra[] = [
     time: "4:30pm y 5:30pm",
     venue: "Centro de Difusión Cultural Raúl Gamboa del I.P.B.A.",
     venueAddress: "Avenida Universidad esq, C. Negrete SN, Centro",
-    cost: "Entrada libre\nAcceso: Cupo limitado. No requiere registro previo, se recomienda anticipar la llegada\nBoletos al Whatsapp: 44 47 02 70 37",
+    cost: "Entrada libre\nAcceso: Cupo limitado. No requiere registro previo, se recomienda anticipar la llegada\nBoletos al Whatsapp: 44 47 02 70 37.",
     icon: Baby,
     synopsis: "\"DUANOP\" es una experiencia escénica dirigida a primeras infancias donde solo basta encontrarse para empezar a jugar, un espacio donde todos los lugares se vuelven posibles, la cochera, la sala y el jardín se vuelven mundos extraordinarios.",
     team: [
